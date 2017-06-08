@@ -1,0 +1,380 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using System.Collections;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        Hashtable targethashTable;
+        Hashtable nonorderedhashTable;
+        string filename;
+        string filename2;
+        string[] target;
+        OpenFileDialog ofd = new OpenFileDialog();
+
+        List<string> targetlist = new List<string>();
+        List<string> nonorderedlist = new List<string>();
+        List<string> orderedlist = new List<string>();
+        List<string> lastlist = new List<string>();
+
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        public void button1_Click_1(object sender, EventArgs e)
+        {
+            //   OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Open Text";
+            ofd.Filter = "C File |*.c|t55 File |*.t55";
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = ofd.FileName;
+                textBox1.Text = filename;
+
+              /*  StreamReader sr = new StreamReader(File.OpenRead(filename));
+                //  target = sr.ReadLine();
+                target = File.ReadAllLines(filename);
+                sr.Dispose();*/
+
+
+
+            }
+        }
+
+        string[] nonordered;
+        OpenFileDialog ofd2 = new OpenFileDialog();
+
+        public void button2_Click(object sender, EventArgs e)
+        {
+            // OpenFileDialog ofd2 = new OpenFileDialog();
+            ofd2.Title = "Open Text";
+            ofd2.Filter = "C File |*.c|t55 File |*.t55";
+            if (ofd2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename2 = ofd2.FileName;
+                textBox2.Text = filename2;
+
+              /*  StreamReader sr2 = new StreamReader(File.OpenRead(filename));
+                nonordered = File.ReadAllLines(filename);
+                sr2.Dispose();
+                */
+
+
+            }
+        }
+
+
+        //  Hashtable hashTable2;
+        bool condition = false;
+        bool condition2 = false;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+
+            if (!File.Exists(textBox1.Text) || !File.Exists(textBox2.Text))
+            {
+                MessageBox.Show("You need to select two files to go!!!");
+            }
+
+            if (File.Exists(textBox1.Text) && File.Exists(textBox2.Text))
+            {
+
+                StreamReader sr = new StreamReader(File.OpenRead(filename));
+                //  target = sr.ReadLine();
+                target = File.ReadAllLines(filename);
+                sr.Dispose();
+
+                StreamReader sr2 = new StreamReader(File.OpenRead(filename2));
+                nonordered = File.ReadAllLines(filename2);
+                sr2.Dispose();
+
+
+                MessageBox.Show("There we go");
+
+            
+            }
+
+             
+
+            if (File.Exists(textBox1.Text) && File.Exists(textBox2.Text))
+            {
+
+                foreach (string line in target) ////ASSIGN THE  SECTIONS TO ARRAY
+                {
+                    if (line.Contains("Data_Dictionary */"))
+                    {
+                        
+                      //  targetlist.Add("Data_Dictionary */");
+                        break;
+                    }
+                    
+
+                    if ((line.Contains("Data_Dictionary_v1.0")) || condition)
+                    {
+                        condition = true;
+
+                        if (line.Contains("SECTION") || condition2)
+                        { 
+                            condition2 = true;
+                            if (line == "") continue;//i--;
+                            if (line.Contains("SECTION")) continue;
+                            targetlist.Add(line);
+                            
+                        }
+
+                    }
+                }
+            }
+
+                
+
+          
+
+                
+
+                
+            condition = false;
+            condition2 = false;
+
+            if (File.Exists(textBox1.Text) && File.Exists(textBox2.Text))
+            {
+                foreach (string line in nonordered) ////ASSIGN THE  SECTIONS TO ARRAY
+                {
+                    if (line.Contains("Data_Dictionary */"))
+                    {
+                      //  nonorderedlist.Add("Data_Dictionary */");
+                        break;
+                    }
+
+                    if ((line.Contains("Data_Dictionary_v1.0") ) || condition)
+                    {
+                        condition = true;
+                        if (line.Contains("SECTION") || condition2)
+                        {
+                            condition2 = true;
+                            if (line == "") continue;
+                            if (line.Contains("SECTION")) continue;
+                            nonorderedlist.Add(line);
+
+                           
+                        }
+
+                    }
+                }
+
+            }
+
+         
+
+
+            targethashTable = new Hashtable();
+            nonorderedhashTable = new Hashtable();
+
+            for (int j = 0; j < targetlist.Count; j++)
+            {
+
+                string s = targetlist[j];
+                int endOfName = s.IndexOf(';');
+                string name = s.Substring(0, endOfName);
+                name = name.Trim();
+
+                //  hashTable[targetarray[j]].
+                targethashTable.Add(name,targetlist[j]);
+            }
+
+            for (int j = 0; j < nonorderedlist.Count; j++)
+            {
+
+                string s = nonorderedlist[j];
+                int endOfName = s.IndexOf(';');
+                string name = s.Substring(0, endOfName);
+                name = name.Trim();
+
+                //  hashTable[targetarray[j]].
+                nonorderedhashTable.Add(name,nonorderedlist[j]);
+            }
+
+            for (int j = 0; j < targetlist.Count; j++)
+            {
+                string name;
+                int endOfName;
+
+                
+                    string s = targetlist[j];
+                    endOfName = s.IndexOf(';');
+                    name = s.Substring(0, endOfName);
+                    name = name.Trim();
+
+                
+                
+                    if (nonorderedhashTable.ContainsKey(name))
+                    {
+                        orderedlist.Add((string)nonorderedhashTable[name]);
+                    }
+                
+
+            }
+
+            for (int j = 0; j < nonorderedlist.Count; j++)
+            {
+                string name2;
+              //  string name;
+                int endOfName;
+
+
+            /*    if (j < targetlist.Count)
+                {
+                    string s = targetlist[j];
+                    endOfName = s.IndexOf(';');
+                    name = s.Substring(0, endOfName);
+                    name = name.Trim();
+
+               
+                    if (nonorderedhashTable.ContainsKey(name))
+                    {
+                        orderedlist.Add((string)nonorderedhashTable[name]);
+                    }
+                }
+                */
+                
+
+                    string s2 = nonorderedlist[j];
+                    endOfName = s2.IndexOf(';');
+                    name2 = s2.Substring(0, endOfName);
+                    name2 = name2.Trim();
+
+                
+                if (!targethashTable.ContainsKey(name2))
+                {
+                    lastlist.Add((string)nonorderedhashTable[name2]);
+                }
+
+           //     orderedlist.AddRange(lastlist);
+
+             /*   System.IO.StreamWriter file = new System.IO.StreamWriter("C:\\Users\\jj7g9q\\Desktop\\orderedlist.txt");
+
+                foreach (string line in orderedlist)
+                    file.WriteLine(line);
+
+                file.Close();
+*/
+                //   orderedlist[(int)hashTable[name]] = nonorderedlist[j];*/
+
+
+
+            }
+            orderedlist.AddRange(lastlist);
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter("C:\\Users\\jj7g9q\\Desktop\\orderedlist.txt");
+
+            foreach (string line in orderedlist)
+                file.WriteLine(line);
+
+            file.Close();
+
+            //  MessageBox.Show("IT WORKED WELL.");
+        }
+
+    }
+}
+
+
+/*        hashTable = new Hashtable();
+
+        for (int i = 0; i < targetarray.Length; i++)
+        {
+            hashTable.Add( targetarray[i],i);
+        }
+
+
+
+
+        string[] targetarray2 = nonordered.Split(';');
+
+        for (int i = 0; i < targetarray2.Length; i++)
+        {
+          targetarray[i] =  targetarray2[i].Trim();
+        }
+
+
+       //  hashTable2 = new Hashtable();
+
+        for (int i = 0; i < targetarray2.Length; i++)
+        {
+            targetarray2[(int)hashTable[targetarray2[i]]] = targetarray2[i];
+
+        }
+
+
+        //   ICollection key = hashTable.Keys;
+
+        /*  foreach (string k in key)
+          {
+             hashTable2[k] =  hashTable[k];
+          }
+
+        for (int i = 0; i < targetarray2.Length; i++)
+        {
+            string key = hashTable2[i].GetHashCode
+
+        }*/
+
+//     if (line.Contains("SECTION"))
+/*  {
+        targetarray = line;
+
+        for (int i = 0; i < targetarray.Length; i++)
+        {
+            targetarray[i] = targetarray[i].Trim();
+        }
+
+
+  }*/
+
+
+
+/*
+ string s = "asdfasdfa; 123; asdf;";
+        int endOfName = s.IndexOf(';');
+        string name = s.Substring(0, endOfName);
+        name = name.Trim();
+ */
+
+
+/*  if (File.Exists(textBox1.Text) && File.Exists(textBox2.Text))
+       {
+
+           foreach (string line in nonordered) /////FIND LENGTH OF LINES OF DICTIONARY
+           {
+               if (line.Contains("Data_Dictionary *//*"))
+               {
+                   i++;
+                   break;
+               }
+
+               if ((line.Contains("Data_Dictionary_v1.0") ) || i > 0)
+               {
+                   if (line == "") continue;
+                   i++;
+
+
+               }
+           }
+       }*/
