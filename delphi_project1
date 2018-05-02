@@ -150,21 +150,21 @@ namespace WindowsFormsApplication1
 
                 foreach (string line in target) ////ASSIGN THE  OUTPUTS OF DICTIONARY TO ARRAY
                 {
-                    if (line.Contains("Data_Dictionary */"))
+                    if (line.Contains("--------------------------------))
                     {                                             
                         break;
                     }
                     
 
-                    if ((line.Contains("Data_Dictionary_v1.0")) || condition)
+                    if ((line.Contains("-------------------------------")) || condition)
                     {
                         condition = true;
 
-                        if (line.Contains("SECTION") || condition2)
+                        if (line.Contains("-----------------") || condition2)
                         { 
                             condition2 = true;
                             if (line == "") continue;
-                            if (line.Contains("SECTION")) continue;
+                            if (line.Contains("-------------------")) continue;
                             targetlist.Add(line);
                             
                         }
@@ -182,19 +182,19 @@ namespace WindowsFormsApplication1
             {
                 foreach (string line in nonordered) ////ASSIGN THE  OUTPUTS OF NONORDERED FILE TO ARRAY
                 {
-                    if (line.Contains("Data_Dictionary */"))
+                    if (line.Contains("------------------------------"))
                     {                      
                         break;
                     }
 
-                    if ((line.Contains("Data_Dictionary_v1.0") ) || condition)
+                    if ((line.Contains("--------------------------------------") ) || condition)
                     {
                         condition = true;
-                        if (line.Contains("SECTION") || condition2)
+                        if (line.Contains("---------------------") || condition2)
                         {
                             condition2 = true;
                             if (line == "") continue;
-                            if (line.Contains("SECTION")) continue;
+                            if (line.Contains("------------------------")) continue;
                             nonorderedlist.Add(line);
 
                         }
