@@ -118,23 +118,23 @@ namespace WindowsFormsApplication1
 
                 foreach (string line in target) ////ASSIGN THE  SECTIONS TO ARRAY
                 {
-                    if (line.Contains("Data_Dictionary */"))
+                    if (line.Contains("------------------------------------ */"))
                     {
                         
-                      //  targetlist.Add("Data_Dictionary */");
+                      //  targetlist.Add("----------------------------------- */");
                         break;
                     }
                     
 
-                    if ((line.Contains("Data_Dictionary_v1.0")) || condition)
+                    if ((line.Contains("---------------------------------.0")) || condition)
                     {
                         condition = true;
 
-                        if (line.Contains("SECTION") || condition2)
+                        if (line.Contains("----------------------------") || condition2)
                         { 
                             condition2 = true;
                             if (line == "") continue;//i--;
-                            if (line.Contains("SECTION")) continue;
+                            if (line.Contains("-------------------------------")) continue;
                             targetlist.Add(line);
                             
                         }
@@ -157,20 +157,20 @@ namespace WindowsFormsApplication1
             {
                 foreach (string line in nonordered) ////ASSIGN THE  SECTIONS TO ARRAY
                 {
-                    if (line.Contains("Data_Dictionary */"))
+                    if (line.Contains("------------------------------- */"))
                     {
-                      //  nonorderedlist.Add("Data_Dictionary */");
+                      //  nonorderedlist.Add("----------------------------- */");
                         break;
                     }
 
-                    if ((line.Contains("Data_Dictionary_v1.0") ) || condition)
+                    if ((line.Contains("--------------------------------.0") ) || condition)
                     {
                         condition = true;
-                        if (line.Contains("SECTION") || condition2)
+                        if (line.Contains("---------------------------") || condition2)
                         {
                             condition2 = true;
                             if (line == "") continue;
-                            if (line.Contains("SECTION")) continue;
+                            if (line.Contains("-------------------------------")) continue;
                             nonorderedlist.Add(line);
 
                            
